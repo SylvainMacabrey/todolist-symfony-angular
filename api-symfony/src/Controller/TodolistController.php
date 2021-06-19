@@ -52,8 +52,8 @@ class TodolistController extends AbstractController
      */
     public function updateTodolist($id, Request $request): Response
     {
-        $todolist = $this->todolistRepository->find($id);
         $data = json_decode($request->getContent());
+        $todolist = $this->todolistRepository->find($id);
         $todolist->setTitle($data->title);
         $this->em->persist($todolist);
         $this->em->flush();

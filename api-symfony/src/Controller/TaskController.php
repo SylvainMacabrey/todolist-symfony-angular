@@ -22,7 +22,7 @@ class TaskController extends AbstractController
     }
 
     /**
-     * @Route("/api/task/create/{id}", name="task.createTodolists", methods="POST")
+     * @Route("/api/task/create/{id}", name="task.createTask", methods="POST")
      */
     public function createTask($id, Request $request): Response
     {
@@ -37,4 +37,36 @@ class TaskController extends AbstractController
             'task' => $this->taskRepository->transform($task),
         ], 200, [], ['groups' => ['show']]);
     }
+
+    /**
+     * @Route("/api/task/update/{id}", name="task.updateTask", methods="PUT")
+     */
+    public function updateTask($id, Request $request): Response
+    {
+        $data = json_decode($request->getContent());
+        $task = $this->taskRepository->find($id);
+        if(isset($data->name))
+            $task->setName($data->name);
+        if(isset($data->isComplete))
+            $task->setIsComplete($data->isComplete);
+        $this->em->persist($task);
+        $this->em->flush();
+        return $this->json([
+            'task' => $this->taskRepository->transform($task),
+        ], 200, [], ['groups' => ['show']]);
+    }
+
+    /**
+     * @Route("/api/task/delete/{id}", name="task.udeleteTask", methods="DELETE")
+     */
+    public function deleteTask($id): Response
+    {
+        $task = $this->taskRepository->find($id);
+        $this->em->remove($task);
+        $this->em->flush();
+        return $this->json([
+            'todolist' => "task delete",
+        ]);
+    }
+
 }
