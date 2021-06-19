@@ -32,7 +32,7 @@ class TodolistController extends AbstractController
     }
 
     /**
-     * @Route("/api/todolist/create", name="todolist.getTodolists", methods="POST")
+     * @Route("/api/todolist/create", name="todolist.createTodolists", methods="POST")
      */
     public function createTodolist(Request $request): Response
     {
@@ -40,6 +40,21 @@ class TodolistController extends AbstractController
         $todolist = new Todolist();
         $todolist->setTitle($data->title);
         $todolist->setUsertodo($this->userRepository->findUserByToken($request->headers->get('Authorization')));
+        $this->em->persist($todolist);
+        $this->em->flush();
+        return $this->json([
+            'todolist' => $this->todolistRepository->transform($todolist),
+        ], 200, [], ['groups' => ['show']]);
+    }
+
+    /**
+     * @Route("/api/todolist/update/{id}", name="todolist.updateTodolists", methods="PUT")
+     */
+    public function updateTodolist($id, Request $request): Response
+    {
+        $todolist = $this->todolistRepository->find($id);
+        $data = json_decode($request->getContent());
+        $todolist->setTitle($data->title);
         $this->em->persist($todolist);
         $this->em->flush();
         return $this->json([
