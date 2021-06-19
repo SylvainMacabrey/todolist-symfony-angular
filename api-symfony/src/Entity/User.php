@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -18,26 +19,31 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list", "show"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list", "show"})
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"list", "show"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"list", "show"})
      */
     private $roles = [];
 
     /**
      * @ORM\OneToMany(targetEntity=Todolist::class, mappedBy="usertodo", orphanRemoval=true)
+     * @Groups({"list", "show"})
      */
     private $todolists;
 

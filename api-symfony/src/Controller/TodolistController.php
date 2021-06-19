@@ -62,4 +62,17 @@ class TodolistController extends AbstractController
         ], 200, [], ['groups' => ['show']]);
     }
 
+    /**
+     * @Route("/api/todolist/delete/{id}", name="todolist.deleteTodolists", methods="DELETE")
+     */
+    public function deleteTodolist($id): Response
+    {
+        $todolist = $this->todolistRepository->find($id);
+        $this->em->remove($todolist);
+        $this->em->flush();
+        return $this->json([
+            'todolist' => "todolist delete",
+        ]);
+    }
+
 }
