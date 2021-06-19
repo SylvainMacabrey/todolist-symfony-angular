@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,17 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, JWTEncoderInterface $jwtEncoder)
     {
         parent::__construct($registry, User::class);
+        $this->jwtEncoder = $jwtEncoder;
+    }
+
+    public function findUserByToken($token)
+    {
+        $headers = substr($token, 7);
+        $email = $this->jwtEncoder->decode($headers)["username"];
+        return $this->findOneBy(['email' => $email]);
     }
 
     // /**
