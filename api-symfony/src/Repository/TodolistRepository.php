@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Todolist;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Todolist|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,9 +15,31 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class TodolistRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, TaskRepository $taskRepository)
     {
         parent::__construct($registry, Todolist::class);
+        $this->taskRepository = $taskRepository;
+    }
+
+    public function transform(Todolist $todolist)
+    {
+        return [
+            'id'    => (int) $todolist->getId(),
+            'title' => (string) $todolist->getTitle(),
+            'userid' => (string) $todolist->getUsertodo()->getId(),
+            'useremail' => (string) $todolist->getUsertodo()->getUsername(),
+            'tasks' => $this->taskRepository->transformAll($todolist)
+        ];
+    }
+
+    public function transformAll()
+    {
+        $todolists = $this->findAll();
+        $todolistsArray = [];
+        foreach ($todolists as $todolist) {
+            $todolistsArray[] = $this->transform($todolist);
+        }
+        return $todolistsArray;
     }
 
     // /**
