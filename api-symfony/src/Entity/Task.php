@@ -29,6 +29,7 @@ class Task
 
     /**
      * @ORM\ManyToOne(targetEntity=Todolist::class, inversedBy="tasks")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $todolist;
 

@@ -38,10 +38,11 @@ class TodolistController extends AbstractController
      */
     public function createTodolist(Request $request): Response
     {
+        $user = $this->userRepository->findUserByToken($request->headers->get('Authorization'));
         $data = json_decode($request->getContent());
         $todolist = new Todolist();
         $todolist->setTitle($data->title);
-        $todolist->setUsertodo($this->userRepository->findUserByToken($request->headers->get('Authorization')));
+        $todolist->setUsertodo($user);
         $this->em->persist($todolist);
         $this->em->flush();
         return $this->json([
@@ -54,8 +55,14 @@ class TodolistController extends AbstractController
      */
     public function updateTodolist($id, Request $request): Response
     {
-        $data = json_decode($request->getContent());
+        $user = $this->userRepository->findUserByToken($request->headers->get('Authorization'));
         $todolist = $this->todolistRepository->find($id);
+        if($user !== $todolist->getUsertodo()) {
+            return $this->json([
+                'error' => 'vous ne pouvez pas changer cette todolist',
+            ], 401);
+        }   
+        $data = json_decode($request->getContent());
         $todolist->setTitle($data->title);
         $this->em->persist($todolist);
         $this->em->flush();
@@ -67,14 +74,20 @@ class TodolistController extends AbstractController
     /**
      * @Route("/api/todolist/delete/{id}", name="todolist.deleteTodolists", methods="DELETE")
      */
-    public function deleteTodolist($id): Response
+    public function deleteTodolist($id,  Request $request): Response
     {
+        $user = $this->userRepository->findUserByToken($request->headers->get('Authorization'));
         $todolist = $this->todolistRepository->find($id);
+        if($user !== $todolist->getUsertodo()) {
+            return $this->json([
+                'error' => 'vous ne pouvez pas supprimer cette todolist',
+            ]);
+        }   
         $this->em->remove($todolist);
         $this->em->flush();
         return $this->json([
             'todolist' => "todolist delete",
-        ]);
+        ], 401);
     }
 
 }

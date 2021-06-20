@@ -21,7 +21,7 @@ class TodolistRepository extends ServiceEntityRepository
         $this->taskRepository = $taskRepository;
     }
 
-    public function transform(Todolist $todolist, $filterIsComplete)
+    public function transform(Todolist $todolist, $filterIsComplete = '')
     {
         return [
             'id'    => (int) $todolist->getId(),

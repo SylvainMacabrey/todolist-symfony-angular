@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use App\Repository\TodolistRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TaskController extends AbstractController
 {
 
-    public function __construct(TaskRepository $taskRepository, TodolistRepository $todolistRepository, EntityManagerInterface $em)
+    public function __construct(TaskRepository $taskRepository, TodolistRepository $todolistRepository, UserRepository $userRepository, EntityManagerInterface $em)
     {
         $this->todolistRepository = $todolistRepository;
         $this->taskRepository = $taskRepository;
+        $this->userRepository = $userRepository;
         $this->em = $em;
     }
 
@@ -43,8 +45,14 @@ class TaskController extends AbstractController
      */
     public function updateTask($id, Request $request): Response
     {
-        $data = json_decode($request->getContent());
+        $user = $this->userRepository->findUserByToken($request->headers->get('Authorization'));
         $task = $this->taskRepository->find($id);
+        if($user !== $task->getTodolist()->getUsertodo()) {
+            return $this->json([
+                'error' => 'vous ne pouvez pas modifier cette tâche',
+            ], 401);
+        }
+        $data = json_decode($request->getContent());
         if(isset($data->name))
             $task->setName($data->name);
         if(isset($data->isComplete))
@@ -59,9 +67,15 @@ class TaskController extends AbstractController
     /**
      * @Route("/api/task/delete/{id}", name="task.udeleteTask", methods="DELETE")
      */
-    public function deleteTask($id): Response
+    public function deleteTask($id, Request $request): Response
     {
+        $user = $this->userRepository->findUserByToken($request->headers->get('Authorization'));
         $task = $this->taskRepository->find($id);
+        if($user !== $task->getTodolist()->getUsertodo()) {
+            return $this->json([
+                'error' => 'vous ne pouvez pas supprimer cette tâche',
+            ], 401);
+        }
         $this->em->remove($task);
         $this->em->flush();
         return $this->json([

@@ -32,6 +32,7 @@ class Todolist
 
     /**
      * @ORM\OneToMany(targetEntity=Task::class, mappedBy="todolist")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private $tasks;
 
