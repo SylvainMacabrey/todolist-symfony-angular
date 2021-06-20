@@ -1,0 +1,19 @@
+<div class="card form-login">
+  <div class="card-header">Se connecter</div>
+  <div class="card-body">
+    <form #form="ngForm">
+        <!-- Email input -->
+        <div class="form-outline mb-4">
+            <input type="email" id="email" class="form-control" name="email" [(ngModel)]="email">
+            <label class="form-label" for="email">Email address</label>
+        </div>
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" id="password" class="form-control" name="password" [(ngModel)]="password">
+            <label class="form-label" for="password">Password</label>
+        </div>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block" (click)="login(form)">Se connecter</button>
+    </form>
+  </div>
+</div>
