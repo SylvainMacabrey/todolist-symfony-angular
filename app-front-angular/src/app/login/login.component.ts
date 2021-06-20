@@ -12,6 +12,7 @@ export class LoginComponent implements OnInit {
 
   public email: string;
   public password: string;
+  public errors: [];
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -20,9 +21,15 @@ export class LoginComponent implements OnInit {
   }
 
   login(form: NgForm) {
-    this.authService.login(form.value.email,form.value.password).subscribe(response => { 
-      this.router.navigate(['todolist']);
-    });
+    this.authService.login(form.value.email,form.value.password).subscribe(
+      response => { 
+        this.router.navigate(['todolist']);
+      },
+      error => {
+        console.log(error);
+        this.errors = error;
+      }
+    );
   }
 
 }
