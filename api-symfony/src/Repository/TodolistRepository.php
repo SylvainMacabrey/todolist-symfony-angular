@@ -21,23 +21,28 @@ class TodolistRepository extends ServiceEntityRepository
         $this->taskRepository = $taskRepository;
     }
 
-    public function transform(Todolist $todolist)
+    public function transform(Todolist $todolist, $filterIsComplete)
     {
         return [
             'id'    => (int) $todolist->getId(),
             'title' => (string) $todolist->getTitle(),
             'userid' => (string) $todolist->getUsertodo()->getId(),
             'useremail' => (string) $todolist->getUsertodo()->getUsername(),
-            'tasks' => $this->taskRepository->transformAll($todolist)
+            'tasks' => $this->taskRepository->transformAll($todolist, $filterIsComplete)
         ];
     }
 
-    public function transformAll()
+    public function transformAll($filterUser = '', $filterIsComplete = '')
     {
-        $todolists = $this->findAll();
+        $qb = $this->createQueryBuilder('todolist');
+        if($filterUser) {
+            $qb->where('todolist.usertodo = :filter')->setParameter('filter', $filterUser);
+        }
+        $todolists = $qb->getQuery()->execute();
+        //$todolists = $this->findAll();
         $todolistsArray = [];
         foreach ($todolists as $todolist) {
-            $todolistsArray[] = $this->transform($todolist);
+            $todolistsArray[] = $this->transform($todolist, $filterIsComplete);
         }
         return $todolistsArray;
     }

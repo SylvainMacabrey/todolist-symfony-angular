@@ -24,10 +24,12 @@ class TodolistController extends AbstractController
     /**
      * @Route("/api/todolists", name="todolist.getTodolists", methods="GET")
      */
-    public function getTodolists(): Response
+    public function getTodolists(Request $request): Response
     {
+        $filterUser = $request->query->get('filterUser');
+        $filterIsComplete = $request->query->get('filterIsComplete');
         return $this->json([
-            'todolists' => $this->todolistRepository->transformAll(),
+            'todolists' => $this->todolistRepository->transformAll($filterUser, $filterIsComplete),
         ]);
     }
 

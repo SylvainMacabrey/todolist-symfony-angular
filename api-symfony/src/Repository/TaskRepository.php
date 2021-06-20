@@ -25,13 +25,19 @@ class TaskRepository extends ServiceEntityRepository
         return [
             'id'    => (int) $task->getId(),
             'name' => (string) $task->getName(),
-            'isCompleted' => (boolean) $task->getIsComplete()
+            'isComplete' => (boolean) $task->getIsComplete()
         ];
     }
 
-    public function transformAll(Todolist $todolist)
+    public function transformAll(Todolist $todolist, $filterIsComplete)
     {
-        $tasks = $todolist->getTasks();
+        $qb = $this->createQueryBuilder('task')
+                   ->where('task.todolist = :todolist')->setParameter('todolist', $todolist);
+        if(isset($filterIsComplete)) {
+            $qb->andWhere('task.isComplete = :filter')->setParameter('filter', $filterIsComplete);
+        }
+        $tasks = $qb->getQuery()->execute();
+        //$tasks = $todolist->getTasks();
         $tasksArray = [];
         foreach ($tasks as $task) {
             $tasksArray[] = $this->transform($task);
