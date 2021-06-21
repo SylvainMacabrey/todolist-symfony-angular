@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Todolist;
+use Doctrine\ORM\Query\Expr\Join;
 use App\Repository\TaskRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -36,7 +38,7 @@ class TodolistRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('todolist');
         if($filterUser) {
-            $qb->where('todolist.usertodo = :filter')->setParameter('filter', $filterUser);
+            $qb->innerJoin(User::class, 'user', Join::WITH, 'user.id = todolist.usertodo')->where('user.email LIKE :filter')->setParameter('filter', '%'.$filterUser.'%');
         }
         $todolists = $qb->getQuery()->execute();
         //$todolists = $this->findAll();
