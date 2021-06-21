@@ -24,7 +24,7 @@
       <li *ngFor="let task of todolist.tasks" class="list-group-item">
         {{ task.name }}
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" [checked]="task.isComplete" />
+          <input #taskIsComplete class="form-check-input" type="checkbox" value="" [checked]="task.isComplete" [disabled]="todolist.useremail != localStorageItem('username')" (click)="onChangeTaskIsComplete(task.id, taskIsComplete.checked)" />
         </div>
       </li>
     </ul>

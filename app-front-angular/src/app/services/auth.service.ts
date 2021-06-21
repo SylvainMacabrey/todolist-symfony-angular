@@ -16,7 +16,9 @@ export class AuthService {
              map(response => {
                  // login successful if there's a jwt token in the response
                  if (response) {
+                    console.log(response);
                     localStorage.setItem('jwt', JSON.stringify(response));
+                    localStorage.setItem('username', username);
                  }
              })
          );

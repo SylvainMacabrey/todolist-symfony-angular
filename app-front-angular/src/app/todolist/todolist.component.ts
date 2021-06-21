@@ -12,11 +12,16 @@ export class TodolistComponent implements OnInit {
   public todolists: [];
   public filterUser: string = '';
   public filterIsComplete: boolean;
+  public userid: number;
 
   constructor(private router: Router, private todoListService: TodolistService) { }
 
   ngOnInit(): void {
     this.getTodoLists();
+  }
+
+  public localStorageItem(id: string): string {
+    return localStorage.getItem(id);
   }
 
   getTodoLists() {
@@ -36,8 +41,17 @@ export class TodolistComponent implements OnInit {
     this.getTodoLists();
   }
 
+  onChangeTaskIsComplete(idTask, isComplete) {
+    this.todoListService.updateTask(idTask, isComplete).subscribe(
+      response => {
+        console.log(response);
+      }
+    );
+  }
+
   logout() {
     localStorage.removeItem("jwt");
+    localStorage.removeItem("username");
     this.router.navigate(['login']);
   }
 

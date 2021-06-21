@@ -9,18 +9,8 @@ export class TodolistService {
 
   private url = 'http://127.0.0.1:8000/api';
   private token: string = '';
-  private headers: HttpHeaders;
 
-  constructor(private httpClient: HttpClient) {
-    this.init();
-  }
-
-  async init() {
-    this.token = await localStorage.getItem('jwt');
-    this.headers = new HttpHeaders({
-        Authorization: 'Bearer ' + this.token
-    });
-  }
+  constructor(private httpClient: HttpClient) { }
 
   findAllTodolists(filterUser: string, filterIsComplete?: boolean) {
     var filter = `?filterUser=${ filterUser }`;
@@ -33,5 +23,16 @@ export class TodolistService {
               return response;
           }
       }));
+  }
+
+  updateTask(idTask, isComplete?: boolean, name?: string) {
+    var taskBody = {};
+    if(typeof isComplete !== 'undefined') {
+      taskBody["isComplete"] = isComplete;
+    }
+    if(typeof name !== 'undefined') {
+      taskBody["name"] = name;
+    }
+    return this.httpClient.put(`${ this.url }/task/update/${ idTask }`, taskBody);
   }
 }
