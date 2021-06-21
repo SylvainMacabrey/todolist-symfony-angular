@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TodolistService } from '../services/todolist.service';
 
 @Component({
   selector: 'app-todolist',
@@ -8,9 +9,31 @@ import { Router } from '@angular/router';
 })
 export class TodolistComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  public todolists: [];
+  public filterUser: string = '';
+  public filterIsComplete: boolean;
+
+  constructor(private router: Router, private todoListService: TodolistService) { }
 
   ngOnInit(): void {
+    this.getTodoLists();
+  }
+
+  getTodoLists() {
+    this.todoListService.findAllTodolists(this.filterUser, this.filterIsComplete).subscribe(
+      response => {
+        this.todolists = response["todolists"];
+    });
+  }
+
+  onChangeFiltreIsComplete(filtreIsComplete: boolean) {
+    this.filterIsComplete = filtreIsComplete;
+    this.getTodoLists();
+  }
+
+  onChangeFiltreUser(event) {
+    this.filterUser = event.target.value;
+    this.getTodoLists();
   }
 
   logout() {

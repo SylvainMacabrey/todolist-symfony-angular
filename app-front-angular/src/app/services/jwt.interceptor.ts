@@ -9,11 +9,11 @@ export class JwtInterceptor implements HttpInterceptor {
         // add authorization header with jwt token if available
         let jwt = JSON.parse(localStorage.getItem('jwt'));
         if (jwt) {
-            request = request.clone({
-                setHeaders: {
-                    Authorization: `Bearer ${jwt}`
-                }
-            });
+          request = request.clone({
+              setHeaders: {
+                  Authorization: `Bearer ${jwt["token"]}`
+              }
+          });
         }
         return next.handle(request);
     }

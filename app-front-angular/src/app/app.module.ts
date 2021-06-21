@@ -6,8 +6,10 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { TodolistComponent } from './todolist/todolist.component';
 import { AuthService } from './services/auth.service';
+import { TodolistService } from './services/todolist.service';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { JwtInterceptor } from './services/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    TodolistService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi:true },
   ],
   bootstrap: [AppComponent]
 })

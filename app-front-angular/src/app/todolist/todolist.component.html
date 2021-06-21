@@ -1,1 +1,32 @@
 <button type="button" class="btn btn-dark px-3 me-2" (click)="logout()">Déconnexion</button>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-outline">
+      <input #searchUser type="text" id="userserach" class="form-control" [value]="" (keyup)="onChangeFiltreUser($event)" />
+      <label class="form-label" for="userserach">Rechercher tâche par utilisateur</label>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="form-check">
+      <input #checkFiltreIsComplete class="form-check-input" type="checkbox" value="" (change)="onChangeFiltreIsComplete(checkFiltreIsComplete.checked)" />
+      <label class="form-check-label" for="flexCheckDefault">
+        Afficher que les tâches à faire
+      </label>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div *ngFor="let todolist of todolists" class="col-md-6">
+    <ul class="list-group">
+      <li class="list-group-item active" aria-current="true">{{ todolist.title }}</li>
+      <li *ngFor="let task of todolist.tasks" class="list-group-item">
+        {{ task.name }}
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" [checked]="task.isComplete" />
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
