@@ -25,6 +25,17 @@ export class TodolistService {
       }));
   }
 
+  addTodolist(todolist) {
+    var todolistBody = {};
+    todolistBody["title"] = todolist.title;
+    todolistBody["tasks"] = [];
+    todolist.tasks.forEach(task => {
+      todolistBody["tasks"].push({ "name": task })
+    });
+    console.log(todolistBody);
+    return this.httpClient.post(`${ this.url }/todolist/create`, todolistBody);
+  }
+
   updateTask(idTask, isComplete?: boolean, name?: string) {
     var taskBody = {};
     if(typeof isComplete !== 'undefined') {

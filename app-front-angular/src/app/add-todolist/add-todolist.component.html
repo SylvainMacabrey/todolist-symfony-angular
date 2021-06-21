@@ -1,0 +1,26 @@
+<form [formGroup]="todolistForm" (ngSubmit)="submitForm()">
+
+  <div class="form-outline mb-4">
+    <input type="text" id="title" class="form-control" formControlName="title" required />
+    <label class="form-label" for="title">Titre dela liste de tâches</label>
+  </div>
+
+  <div formArrayName="tasks">
+    <div class="form-outline mb-4" *ngFor="task of tasks.controls; let i=index">
+      <div class="row">
+        <div class="col-md-8">
+          <input type="text" class="form-control" [id]="i" [formControlName]="i" required />
+          <label class="form-label" [attr.for]=i>Nom de la tâche n° {{ i+1 }}</label>
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-danger btn-danger" (click)="deleteTask(i)" >Supprimer tâche</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn btn-secondary btn-success" (click)="addTask()" >Ajouter tâche</button>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary btn-block">Créer</button>
+
+</form>

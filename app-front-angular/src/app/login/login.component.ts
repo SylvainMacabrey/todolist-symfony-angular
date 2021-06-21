@@ -20,9 +20,9 @@ export class LoginComponent implements OnInit {
 
   }
 
-  login(form: NgForm) {
+  login(form: NgForm): void {
     this.authService.login(form.value.email,form.value.password).subscribe(
-      response => { 
+      response => {
         this.router.navigate(['todolist']);
       },
       error => {

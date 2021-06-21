@@ -2,9 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Task;
 use App\Entity\Todolist;
-use App\Repository\TodolistRepository;
 use App\Repository\UserRepository;
+use App\Repository\TodolistRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +46,14 @@ class TodolistController extends AbstractController
         $todolist->setUsertodo($user);
         $this->em->persist($todolist);
         $this->em->flush();
+        for($i = 0; $i < count($data->tasks); $i++) {
+            $task = new Task();
+            $task->setName($data->tasks[$i]->name);
+            $task->setIsComplete(false);
+            $task->setTodolist($this->todolistRepository->find($todolist->getId()));
+            $this->em->persist($task);
+            $this->em->flush();
+        }
         return $this->json([
             'todolist' => $this->todolistRepository->transform($todolist),
         ], 200, [], ['groups' => ['show']]);

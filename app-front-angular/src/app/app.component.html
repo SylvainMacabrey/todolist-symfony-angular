@@ -7,13 +7,10 @@
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="#">Dashboard</a>
+          <a class="nav-link" [routerLink]="['/todolist']" >Listes de tâches</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Team</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Projects</a>
+        <li *ngIf="localStorageItem('username')" class="nav-item">
+          <a class="nav-link" [routerLink]="['/add-todolist']" >Créer liste de tâches</a>
         </li>
       </ul>
       <!-- Left links -->
@@ -21,8 +18,8 @@
     <!-- Collapsible wrapper -->
 
     <!-- Right elements -->
-    <div class="d-flex align-items-center">
-
+    <div *ngIf="localStorageItem('username')" class="d-flex align-items-center">
+        <button type="button" class="btn btn-dark px-3 me-2" (click)="logout()">Déconnexion</button>
     </div>
     <!-- Right elements -->
   </div>

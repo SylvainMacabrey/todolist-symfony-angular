@@ -24,35 +24,29 @@ export class TodolistComponent implements OnInit {
     return localStorage.getItem(id);
   }
 
-  getTodoLists() {
+  getTodoLists(): void {
     this.todoListService.findAllTodolists(this.filterUser, this.filterIsComplete).subscribe(
       response => {
         this.todolists = response["todolists"];
     });
   }
 
-  onChangeFiltreIsComplete(filtreIsComplete: boolean) {
+  onChangeFiltreIsComplete(filtreIsComplete: boolean): void {
     this.filterIsComplete = filtreIsComplete;
     this.getTodoLists();
   }
 
-  onChangeFiltreUser(event) {
+  onChangeFiltreUser(event): void {
     this.filterUser = event.target.value;
     this.getTodoLists();
   }
 
-  onChangeTaskIsComplete(idTask, isComplete) {
+  onChangeTaskIsComplete(idTask, isComplete): void {
     this.todoListService.updateTask(idTask, isComplete).subscribe(
       response => {
         console.log(response);
       }
     );
-  }
-
-  logout() {
-    localStorage.removeItem("jwt");
-    localStorage.removeItem("username");
-    this.router.navigate(['login']);
   }
 
 }
