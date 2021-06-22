@@ -47,6 +47,12 @@ export class TodolistService {
     return this.httpClient.put(`${ this.url }/task/update/${ idTask }`, taskBody);
   }
 
+  addTask(idTodolist, task) {
+    console.log(task);
+    var taskBody = { "name": task.name };
+    return this.httpClient.post(`${ this.url }/task/create/${ idTodolist }`, taskBody);
+  }
+
   deleteTodolist(idTodolist) {
     return this.httpClient.delete(`${ this.url }/todolist/delete/${ idTodolist }`);
   }

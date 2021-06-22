@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { TodolistService } from '../services/todolist.service';
 import { Router } from '@angular/router';
 

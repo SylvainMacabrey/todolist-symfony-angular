@@ -28,6 +28,21 @@
         <p class="item">{{ task.name }}</p>
         <button *ngIf="localStorageItem('username')==todolist.useremail" type="button" class="btn btn-danger btn-right px-3 me-2 item" (click)="deleteTask(task.id)"><i class="far fa-trash-alt"></i></button>
       </li>
+      <li class="list-group-item active li-center-horizontal li-height" aria-current="true">
+        <form *ngIf="localStorageItem('username')==todolist.useremail; else elseBlock" [formGroup]="taskForm" (ngSubmit)="addTask(todolist.id)">
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-group mb-4">
+                <input type="text" id="title" class="form-control" formControlName="name" placeholder="Ajouter une tâche" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <button type="submit" class="btn btn-success btn-right btn-block px-3 me-2 "><i class="fas fa-plus"></i></button>
+            </div>
+          </div>
+        </form>
+        <ng-template #elseBlock>{{ todolist.useremail }}</ng-template>
+      </li>
     </ul>
   </div>
 </div>

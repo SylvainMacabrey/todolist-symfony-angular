@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TodolistService } from '../services/todolist.service';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-todolist',
@@ -13,11 +14,15 @@ export class TodolistComponent implements OnInit {
   public filterUser: string = '';
   public filterIsComplete: boolean;
   public userid: number;
+  public taskForm: FormGroup;
 
-  constructor(private router: Router, private todolistService: TodolistService) { }
+  constructor(private fb: FormBuilder, private router: Router, private todolistService: TodolistService) { }
 
   ngOnInit(): void {
     this.getTodolists();
+    this.taskForm = this.fb.group({
+      name: ['', Validators.required]
+    });
   }
 
   public localStorageItem(id: string): string {
@@ -47,6 +52,18 @@ export class TodolistComponent implements OnInit {
         console.log(response);
       }
     );
+  }
+
+  addTask(idTodolist): void {
+    if(this.taskForm.value.name.trim() !== '') {
+      this.todolistService.addTask(idTodolist, this.taskForm.value).subscribe(
+        response => {
+          console.log(response);
+          this.getTodolists();
+          this.taskForm.reset();
+        }
+      );
+    }
   }
 
   deleteTodolist(idTodolist): void {
