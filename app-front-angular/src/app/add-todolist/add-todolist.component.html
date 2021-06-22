@@ -1,26 +1,29 @@
 <form [formGroup]="todolistForm" (ngSubmit)="submitForm()">
 
-  <div class="form-outline mb-4">
+  <div class="form-group mb-4">
+    <label class="form-label" for="title">Titre de la liste de tâches</label>
     <input type="text" id="title" class="form-control" formControlName="title" required />
-    <label class="form-label" for="title">Titre dela liste de tâches</label>
   </div>
 
-  <div formArrayName="tasks">
-    <div class="form-outline mb-4" *ngFor="task of tasks.controls; let i=index">
-      <div class="row">
-        <div class="col-md-8">
-          <input type="text" class="form-control" [id]="i" [formControlName]="i" required />
-          <label class="form-label" [attr.for]=i>Nom de la tâche n° {{ i+1 }}</label>
+  <div formArrayName="tasks" style="margin-bottom: 50px;">
+    <div class="row" *ngFor="task of tasks.controls; let i=index">
+      <div class="col-md-9">
+        <div class="form-group mb-4">
+          <input type="text" class="form-control" [id]="i" [formControlName]="i" placeholder="Nom de la tâche n° {{ i+1 }}" required />
         </div>
-        <div class="col-md-4">
-          <button type="button" class="btn btn-danger btn-danger" (click)="deleteTask(i)" >Supprimer tâche</button>
-        </div>
+      </div>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-danger btn-block" (click)="deleteTask(i)" >Supprimer tâche</button>
       </div>
     </div>
     <div class="row">
-      <button type="button" class="btn btn-secondary btn-success" (click)="addTask()" >Ajouter tâche</button>
+      <div class="col-md-6">
+        <button type="button" class="btn btn-success btn-block" (click)="addTask()" >Ajouter tâche</button>
+      </div>
+      <div class="col-md-6">
+        <button type="submit" class="btn btn-primary btn-block">Créer</button>
+      </div>
     </div>
   </div>
-  <button type="submit" class="btn btn-primary btn-block">Créer</button>
 
 </form>

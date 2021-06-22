@@ -1,8 +1,7 @@
 <div class="row">
   <div class="col-md-6">
-    <div class="form-outline">
-      <input #searchUser type="text" id="userserach" class="form-control" [value]="" (keyup)="onChangeFiltreUser($event)" />
-      <label class="form-label" for="userserach">Rechercher tâche par utilisateur</label>
+    <div class="form-group mb-4">
+      <input #searchUser type="text" id="userserach" class="form-control" placeholder="Rechercher tâche par utilisateur" (keyup)="onChangeFiltreUser($event)" />
     </div>
   </div>
   <div class="col-md-6">
@@ -16,18 +15,18 @@
 </div>
 
 <div class="row">
-  <div *ngFor="let todolist of todolists" class="col-md-6">
+  <div *ngFor="let todolist of todolists" class="col-md-6 todolist">
     <ul class="list-group">
-      <li class="list-group-item active" aria-current="true">
-        {{ todolist.title }}
-        <button *ngIf="localStorageItem('username')==todolist.useremail" type="button" class="btn btn-danger px-3 me-2" (click)="deleteTodolist(todolist.id)"><i class="far fa-trash-alt"></i></button>
+      <li class="list-group-item active li-center-horizontal li-height" aria-current="true">
+        <p class="item">{{ todolist.title }}</p>
+        <button *ngIf="localStorageItem('username')==todolist.useremail" type="button" class="btn btn-danger btn-right px-3 me-2 item" (click)="deleteTodolist(todolist.id)"><i class="far fa-trash-alt"></i></button>
       </li>
-      <li *ngFor="let task of todolist.tasks" class="list-group-item">
-        <div class="form-check">
+      <li *ngFor="let task of todolist.tasks" class="list-group-item li-center-horizontal li-height">
+        <div class="form-check item">
           <input #taskIsComplete class="form-check-input" type="checkbox" value="" [checked]="task.isComplete" [disabled]="todolist.useremail != localStorageItem('username')" (click)="onChangeTaskIsComplete(task.id, taskIsComplete.checked)" />
         </div>
-        {{ task.name }}
-        <button *ngIf="localStorageItem('username')==todolist.useremail" type="button" class="btn btn-danger px-3 me-2" (click)="deleteTask(task.id)"><i class="far fa-trash-alt"></i></button>
+        <p class="item">{{ task.name }}</p>
+        <button *ngIf="localStorageItem('username')==todolist.useremail" type="button" class="btn btn-danger btn-right px-3 me-2 item" (click)="deleteTask(task.id)"><i class="far fa-trash-alt"></i></button>
       </li>
     </ul>
   </div>

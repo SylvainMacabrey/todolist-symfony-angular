@@ -1,0 +1,25 @@
+.todolist {
+  margin-top: 30px;
+}
+
+.li-center-horizontal {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.li-height {
+  height: 50px;
+}
+
+.item {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-right {
+  float: right;
+}
+
+p {
+  margin-bottom: 0;
+}
