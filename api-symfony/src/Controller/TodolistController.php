@@ -90,13 +90,13 @@ class TodolistController extends AbstractController
         if($user !== $todolist->getUsertodo()) {
             return $this->json([
                 'error' => 'vous ne pouvez pas supprimer cette todolist',
-            ]);
+            ], 401);
         }   
         $this->em->remove($todolist);
         $this->em->flush();
         return $this->json([
             'todolist' => "todolist delete",
-        ], 401);
+        ], 200);
     }
 
 }

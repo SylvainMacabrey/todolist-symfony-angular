@@ -14,18 +14,18 @@ export class TodolistComponent implements OnInit {
   public filterIsComplete: boolean;
   public userid: number;
 
-  constructor(private router: Router, private todoListService: TodolistService) { }
+  constructor(private router: Router, private todolistService: TodolistService) { }
 
   ngOnInit(): void {
-    this.getTodoLists();
+    this.getTodolists();
   }
 
   public localStorageItem(id: string): string {
     return localStorage.getItem(id);
   }
 
-  getTodoLists(): void {
-    this.todoListService.findAllTodolists(this.filterUser, this.filterIsComplete).subscribe(
+  getTodolists(): void {
+    this.todolistService.findAllTodolists(this.filterUser, this.filterIsComplete).subscribe(
       response => {
         this.todolists = response["todolists"];
     });
@@ -33,18 +33,36 @@ export class TodolistComponent implements OnInit {
 
   onChangeFiltreIsComplete(filtreIsComplete: boolean): void {
     this.filterIsComplete = filtreIsComplete;
-    this.getTodoLists();
+    this.getTodolists();
   }
 
   onChangeFiltreUser(event): void {
     this.filterUser = event.target.value;
-    this.getTodoLists();
+    this.getTodolists();
   }
 
   onChangeTaskIsComplete(idTask, isComplete): void {
-    this.todoListService.updateTask(idTask, isComplete).subscribe(
+    this.todolistService.updateTask(idTask, isComplete).subscribe(
       response => {
         console.log(response);
+      }
+    );
+  }
+
+  deleteTodolist(idTodolist): void {
+    this.todolistService.deleteTodolist(idTodolist).subscribe(
+      response => {
+        console.log(response);
+        this.getTodolists();
+      }
+    );
+  }
+
+  deleteTask(idTask): void {
+    this.todolistService.deleteTask(idTask).subscribe(
+      response => {
+        console.log(response);
+        this.getTodolists();
       }
     );
   }
